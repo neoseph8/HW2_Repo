@@ -9,7 +9,7 @@ int main()
 {
     
     int* partial, * temp;
-    int num_threads, work, n = 1<<30;
+    int num_threads, work, n = 1<<10;
     int i, mynum, last;
     int* arr = new int[n];
 
@@ -29,8 +29,8 @@ int main()
 #pragma omp single
         {
             num_threads = omp_get_num_threads();
-            if (!(partial = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
-            if (!(temp = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
+   //         if (!(partial = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
+     //       if (!(temp = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
             work = n / num_threads + 1; /*sets length of sub-arrays*/
         }
         mynum = omp_get_thread_num();
