@@ -7,15 +7,15 @@ using namespace std;
 
 int main()
 {
-    
+
     int* partial, * temp;
-    int all_threads, work, n = 1<<10;
+    int all_threads, work, n = 1 << 20;
     int i, this_thread, last;
     int* x = new int[n];
 
 
 
-    
+
     for (int j = 0; j < n; j++) {
         x[j] = 1;
 
@@ -29,8 +29,8 @@ int main()
 #pragma omp single
         {
             all_threads = omp_get_num_threads();
-   //         if (!(partial = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
-     //       if (!(temp = (int*)malloc(sizeof(int) * num_threads))) exit(-1);
+                    if (!(partial = (int*)malloc(sizeof(int) * all_threads))) exit(-1);
+                    if (!(temp = (int*)malloc(sizeof(int) * all_threads))) exit(-1);
             work = n / all_threads + 1; /*sets length of sub-arrays*/
         }
         this_thread = omp_get_thread_num();
@@ -51,9 +51,12 @@ int main()
         for (i = work * this_thread; i < (last = work * this_thread + work < n ? work * this_thread + work : n); i++)
             x[i] += partial[this_thread] - x[last - 1];
     }
-    
+
 
     cout << "The first value of X is: " << x[0];
     cout << "\nThe last value of X is: " << x[n - 1];
+
+    free(x);
+
     return 0;
 }
