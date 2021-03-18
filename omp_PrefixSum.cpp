@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <omp.h>
 #include <string.h>
-#include<iostream>
+#include <iostream>
+#include <time.h>
 using namespace std;
 
 int main()
 {
 
     int* partial, * temp;
-    int all_threads, work, n = 1 << 20;
+    int all_threads, work, n = 1 << 25;
     int i, this_thread, last;
     int* x = new int[n];
 
@@ -21,8 +22,9 @@ int main()
 
     }
 
-
-
+    clock_t t;
+    t = clock();
+   // omp_set_num_threads(100);
 
 #pragma omp parallel default(none) private(i, this_thread, last) shared(x, partial, temp, all_threads, work, n)
     {
@@ -52,9 +54,10 @@ int main()
             x[i] += partial[this_thread] - x[last - 1];
     }
 
-
-    cout << "The first value of X is: " << x[0];
-    cout << "\nThe last value of X is: " << x[n - 1];
+    t = clock() - t;
+    std::cout << "Time to Run (clicks): " << t << std::endl;
+    std::cout << "The first value of X is: " << x[0];
+    std::cout << "\nThe last value of X is: " << x[n - 1];
 
     free(x);
 
