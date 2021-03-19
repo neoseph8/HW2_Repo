@@ -12,11 +12,11 @@ int main()
 
 
 
-    int *partial, *temp, *x;
+    int* partial, * temp, * x;
     int all_threads, work, n = 0;
     int i, this_thread, last;
     //int* x = new int[n];
-    
+
 
     for (int nCount = 0; nCount < 8; nCount++) {
 
@@ -32,7 +32,7 @@ int main()
         clock_t t;
         t = clock();
 
-omp_set_num_threads(2*pow(2,nCount))
+        omp_set_num_threads(pow(2, nCount + 1));
 
 
 #pragma omp parallel default(none) private(i, this_thread, last) shared(x, partial, temp, all_threads, work, n)
