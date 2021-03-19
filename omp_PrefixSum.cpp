@@ -18,10 +18,10 @@ int main()
     //int* x = new int[n];
     
 
-    for (int nCount = 0; nCount < 4; nCount++) {
+    for (int nCount = 0; nCount < 8; nCount++) {
 
 
-        n = 1 << (20 + 5 * nCount);
+        n = 1 << 34;
         if (!(x = (int*)malloc(sizeof(int) * n))) return -1;
 
         for (int j = 0; j < n; j++) {
@@ -32,7 +32,7 @@ int main()
         clock_t t;
         t = clock();
 
-
+omp_set_num_threads(2*pow(2,nCount))
 
 
 #pragma omp parallel default(none) private(i, this_thread, last) shared(x, partial, temp, all_threads, work, n)
