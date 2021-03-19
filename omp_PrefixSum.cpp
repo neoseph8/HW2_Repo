@@ -27,7 +27,7 @@ int main()
             for (int myCount = 0; myCount < 3; myCount++) {
 
 
-                n = 1 << (20 + nCount);
+                n = 1 << (18 + 3* nCount);
                 if (!(x = (int*)malloc(sizeof(int) * n))) return -1;
                 if (!(z = (int*)malloc(sizeof(int) * n))) return -1;
                 for (int j = 0; j < n; j++) {
