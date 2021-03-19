@@ -21,7 +21,7 @@ int main()
 
     std::cout << "Seq Time, " << "OMP Time, " << "Problem Size, " << "Thread Count";
     for (int nThread = 0; nThread < 8; nThread++) {
-        for (int nCount = 0; nCount < 5; nCount++) {
+        for (int nCount = 0; nCount < 4; nCount++) {
             tSeq = 0;
             tMPI = 0;
             for (int myCount = 0; myCount < 3; myCount++) {
