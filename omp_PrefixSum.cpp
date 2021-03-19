@@ -12,25 +12,40 @@ int main()
 
 
 
-
-    int* partial, * temp, * x;
+    clock_t t;
+    int* partial, * temp, * x, * z;
     int all_threads, work, n = 0;
     int i, this_thread, last;
     //int* x = new int[n];
 
-
+std::cout<<"Seq Time, "<<"OMP Time"<<"Problem Size"<<"Thread Count";
     for (int nCount = 0; nCount < 8; nCount++) {
 
 
         n = 1 << 30;
         if (!(x = (int*)malloc(sizeof(int) * n))) return -1;
-
+        if (!(z = (int*)malloc(sizeof(int) * n))) return -1;
         for (int j = 0; j < n; j++) {
             x[j] = 1;
+            z[j] = 1;
 
         }
 
-        clock_t t;
+        t = clock();
+        for (int i = 1; i < n; i = i * 2)
+        {
+            for (int j = n - 1; j > i - 1; j--)
+            {
+                z[j] = z[j] + z[j - i];
+            }
+        }
+        std::cout << "\n"<<clock() - t;
+
+
+
+
+
+        
         t = clock();
 
         omp_set_num_threads(pow(2, nCount + 1));
@@ -48,12 +63,12 @@ int main()
 
 
             this_thread = omp_get_thread_num();
-            //calculate prefix-sum for each subarray
+            
             for (i = work * this_thread + 1; i < work * this_thread + work && i < n; i++)
                 x[i] += x[i - 1];
             partial[this_thread] = x[i - 1];
 #pragma omp barrier
-            //calculate prefix sum for the array that was made from last elements of each of the previous sub-arrays
+           
             for (i = 1; i < all_threads; i <<= 1) {
                 if (this_thread >= i)
                     temp[this_thread] = partial[this_thread] + partial[this_thread - i];
@@ -61,17 +76,17 @@ int main()
 #pragma omp single
                 memcpy(partial + 1, temp + 1, sizeof(int) * (all_threads - 1));
             }
-            //update original array
+            
             for (i = work * this_thread; i < (last = work * this_thread + work < n ? work * this_thread + work : n); i++)
                 x[i] += partial[this_thread] - x[last - 1];
         }
 
         t = clock() - t;
-        std::cout << "Time to Run (clicks): " << t;
-        std::cout << "\nThe first value of X is: " << x[0];
-        std::cout << "\nThe last value of X is: " << x[n - 1];
-        std::cout << "\nThe value of n is: " << n;
-        std::cout << "\nThe number of threads used is: " << all_threads << "\n";
+        std::cout << ", " << t;
+      //  std::cout << "\nThe first value of X is: " << x[0];
+      //  std::cout << "\nThe last value of X is: " << x[n - 1];
+        std::cout << ", " << log2(n);
+        std::cout << ", " << all_threads << "\n";
 
         free(x);
         free(partial);
