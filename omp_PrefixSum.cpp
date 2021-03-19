@@ -22,7 +22,7 @@ int main()
     for (int nCount = 0; nCount < 8; nCount++) {
 
 
-        n = 1 << 34;
+        n = 1 << 30;
         if (!(x = (int*)malloc(sizeof(int) * n))) return -1;
 
         for (int j = 0; j < n; j++) {
